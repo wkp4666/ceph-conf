@@ -8,7 +8,7 @@
 
 #define KEYVALLEN 100
 
-int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
+int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum)
 {
 
 }
@@ -21,7 +21,6 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, 
   char buf_i[KEYVALLEN], buf_o[KEYVALLEN];
   int found = 0;
   *lineNum = 0;
-//  int lineNum = 0;
   if((fp = fopen(conf, "r")) == NULL)
   {
     printf("openfile [%s] error[%s] \n", conf, strerror(errno));

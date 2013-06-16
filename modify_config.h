@@ -4,7 +4,7 @@
 
 int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum);
 
-int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal);
+int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum);
 
 
 char *l_trim(char * szOutput, const char *szInput);
