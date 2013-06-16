@@ -31,6 +31,23 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
 
 }
 
+
+
+/* private */
+/* 删除左边的空格*/
+char * l_trim(char * szOutput, const char *szInput)
+{
+ assert(szInput != NULL);
+ assert(szOutput != NULL);
+ assert(szOutput != szInput);
+ for   (NULL; *szInput != '\0' && isspace(*szInput); ++szInput){
+  ;
+ }
+ return strcpy(szOutput, szInput);
+}
+
+
+/* test */
 int main()
 {
  char ip[32];
