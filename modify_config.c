@@ -4,11 +4,14 @@
 #include <assert.h>
 #include <errno.h>
  
-#include "config.h"
+#include "modify_config.h"
 
 #define KEYVALLEN 100
 
+int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
+{
 
+}
 
 int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
 {
@@ -126,9 +129,9 @@ char * a_trim(char * szOutput, const char * szInput)
 /* test */
 int main()
 {
- char ip[32];
- getConfSectionValue("./sample.ceph.conf", "osd.0", "host", ip);
- printf("%s\n",ip);
+ char host[32];
+ getConfSectionValue("./sample.ceph.conf", "osd.0", "host", host);
+ printf("%s\n", host);
  return 0;
 }
 
