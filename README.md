@@ -20,3 +20,6 @@ ceph.conf 文件主要规则
 * 向ceph.conf插入值:(TODO)    
     *  setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum)
 
+
+
+http://zhidao.baidu.com/question/557725172.html
