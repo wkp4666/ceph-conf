@@ -13,14 +13,15 @@ int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
 
 }
 
-int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
+int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum)
 {
   char sectionname[32], keyname[32];
   FILE *fp;
   char *buf,*c;
   char buf_i[KEYVALLEN], buf_o[KEYVALLEN];
   int found = 0;
-  int lineNum = 0;
+  *lineNum = 0;
+//  int lineNum = 0;
   if((fp = fopen(conf, "r")) == NULL)
   {
     printf("openfile [%s] error[%s] \n", conf, strerror(errno));
@@ -31,7 +32,7 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
   sprintf(sectionname, "[%s]", section);
   while( !feof(fp) && fgets( buf_i, KEYVALLEN, fp )!=NULL )
   {
-    lineNum ++;
+    (*lineNum) ++;
     l_trim(buf_o, buf_i);
     if( strlen(buf_o) <= 0 )
       continue;
@@ -80,7 +81,7 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
   }
   fclose( fp );
   if(found == 2){
-    return lineNum;  
+    return 0;  
   } else if(found == 1){ 
     return -1;
   } else{
@@ -137,14 +138,15 @@ int main()
 {
  char host[32];
  int result;
- result = getConfSectionValue("./sample.ceph.conf", "undefine", "undefine", host);
- printf("result is %d,  %s\n", result, host);
- result = getConfSectionValue("./sample.ceph.conf", "osd.0", "undefine", host);
- printf("result is %d,  %s\n", result, host);
- result = getConfSectionValue("./sample.ceph.conf", "undefine", "host", host);
- printf("result is %d,  %s\n", result, host);
- result = getConfSectionValue("./sample.ceph.conf", "osd.0", "host", host);
- printf("result is %d,  %s\n", result, host);
+ int lineNum; 
+ result = getConfSectionValue("./sample.ceph.conf", "undefine", "undefine", host, &lineNum);
+ printf("result is %d,  %s, %d\n", result, host, lineNum);
+ result = getConfSectionValue("./sample.ceph.conf", "osd.0", "undefine", host, &lineNum);
+ printf("result is %d,  %s, %d\n", result, host,lineNum);
+ result = getConfSectionValue("./sample.ceph.conf", "undefine", "host", host, &lineNum);
+ printf("result is %d,  %s, %d\n", result, host, lineNum);
+ result = getConfSectionValue("./sample.ceph.conf", "osd.0", "host", host, &lineNum);
+ printf("result is %d,  %s, %d\n", result, host, lineNum);
 
  return 0;
 }
