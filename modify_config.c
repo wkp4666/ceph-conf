@@ -20,6 +20,7 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
   char *buf,*c;
   char buf_i[KEYVALLEN], buf_o[KEYVALLEN];
   int found = 0;
+  int lineNum = 0;
   if((fp = fopen(conf, "r")) == NULL)
   {
     printf("openfile [%s] error[%s] \n", conf, strerror(errno));
@@ -30,6 +31,7 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
   sprintf(sectionname, "[%s]", section);
   while( !feof(fp) && fgets( buf_i, KEYVALLEN, fp )!=NULL )
   {
+    lineNum ++;
     l_trim(buf_o, buf_i);
     if( strlen(buf_o) <= 0 )
       continue;
@@ -39,7 +41,7 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
     if( found == 0 ){
       if( buf[0] != '[' ) {
         continue;
-      } else if ( strncmp(buf, sectionname, strlen(sectionname))==0 ){
+      } else if ( strncmp(buf, sectionname, strlen(sectionname))== 0 ){
         found = 1;
         continue;
       }
@@ -77,10 +79,13 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal)
 
   }
   fclose( fp );
-  if( found == 2)
-    return 0;
-  else
+  if(found == 2){
+    return lineNum;  
+  } else if(found == 1){ 
     return -1;
+  } else{
+    return -2;
+  }
 }
 
 
@@ -126,12 +131,21 @@ char * a_trim(char * szOutput, const char * szInput)
  *(++p) = '\0';
  return szOutput;
 }
+
 /* test */
 int main()
 {
  char host[32];
- getConfSectionValue("./sample.ceph.conf", "osd.0", "host", host);
- printf("%s\n", host);
+ int result;
+ result = getConfSectionValue("./sample.ceph.conf", "undefine", "undefine", host);
+ printf("result is %d,  %s\n", result, host);
+ result = getConfSectionValue("./sample.ceph.conf", "osd.0", "undefine", host);
+ printf("result is %d,  %s\n", result, host);
+ result = getConfSectionValue("./sample.ceph.conf", "undefine", "host", host);
+ printf("result is %d,  %s\n", result, host);
+ result = getConfSectionValue("./sample.ceph.conf", "osd.0", "host", host);
+ printf("result is %d,  %s\n", result, host);
+
  return 0;
 }
 
