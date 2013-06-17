@@ -17,8 +17,10 @@ ceph.conf 文件主要规则
 * 读ceph.onf 的值:
     *  getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum)
 
-* 向ceph.conf插入值:(TODO)    
-    *  setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum)
+* 向ceph.conf插入值:
+    *  setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int lineNum，int type)
 
-
+##感谢
+http://www.cnblogs.com/bo083/archive/2012/11/19/2777076.html  
+http://zhidao.baidu.com/question/557725172.html
 
