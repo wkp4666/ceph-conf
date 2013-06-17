@@ -1,7 +1,7 @@
 ceph-conf
 =========
 
-read and write conf file for ceph
+read and write conf file for ceph                  
 对ceph.conf文件进行修改（读写）
 
 ##提供对ceph.conf 文件的读取与修改.
