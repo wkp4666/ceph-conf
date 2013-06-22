@@ -14,6 +14,11 @@ int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, 
  */
 int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int lineNum, int type);
 
+/*
+ *删除整个section 包括其子项
+ *返回0表示成功
+ */
+int rmConfSection(char *conf, char *section);
 
 char *l_trim(char * szOutput, const char *szInput);
 char *r_trim(char *szOutput, const char *szInput);

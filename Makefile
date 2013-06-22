@@ -6,3 +6,4 @@ modify_config.o : modify_config.c modify_config.h
 	gcc -c modify_config.c
 clean:
 	-rm *.o
+	-rm ./tmp/*

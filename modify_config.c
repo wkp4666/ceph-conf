@@ -8,9 +8,75 @@
 
 #define KEYVALLEN 1024
 
+int rmConfSection(char *conf, char *section)
+{
+  char sectionname[32];
+  FILE *fp  = 0;
+  FILE *fpt = 0;
+  char *buf,*c;
+  char buf_i[KEYVALLEN], buf_o[KEYVALLEN];
+  int found = 0;
+
+  if((fp = fopen(conf, "r")) == NULL)
+  {
+    printf("openfile [%s] error[%s] \n", conf, strerror(errno));
+    return(-3);
+  }
+
+  if((fpt = fopen("./tmp/test.conf", "w")) == NULL)
+  {
+    printf("openfile [%s] error[%s] \n", conf, strerror(errno));
+    return(-3);
+  }
+
+  fseek(fp, 0, SEEK_SET);
+  memset(sectionname, 0, sizeof(sectionname));
+  sprintf(sectionname, "[%s]", section);
+
+  while( !feof(fp) && fgets( buf_i, KEYVALLEN, fp )!=NULL )
+  {
+    l_trim(buf_o, buf_i);
+    if( strlen(buf_o) <= 0 ){
+      fputs(buf_i, fpt);
+      continue;
+    }
+    buf = NULL;
+    buf = buf_o;
+
+    if( found == 0 ){
+      if( buf[0] != '[' ) {
+        fputs(buf_i, fpt);
+        continue;
+      } else if ( strncmp(buf, sectionname, strlen(sectionname))== 0 ){
+        found = 1;
+        continue;
+      }else{
+        fputs(buf_i, fpt);
+        continue;
+      }
+    } else if(found == 1 ){
+      if( buf[0] == ';' ){
+        fputs(buf_i, fpt);
+        continue;
+      } else if ( buf[0] == '[' ){
+        fputs(buf_i, fpt);
+        found = 0;
+        continue;
+      //  break;
+      } else{
+printf("%s", buf_i);
+        continue;
+      }
+    }
+
+  }
+  fclose(fp);
+  fclose(fpt);
+}
+
 int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int lineNum, int type)
 {
-  FILE *fp;
+  FILE *fp = 0;
   int i;
   char buf[KEYVALLEN] = {0};
   char item[KEYVALLEN] = {0};
@@ -40,6 +106,7 @@ int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, 
     sprintf(item, "    %s=%s", keyName, keyVal);
   }else{
     printf("this item is aleady exit ! \n");
+    fclose( fp );
     return -1;
   }
 
@@ -61,7 +128,7 @@ int setConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, 
 int getConfSectionValue(char *conf, char *section, char *keyName, char *keyVal, int *lineNum)
 {
   char sectionname[32], keyname[32];
-  FILE *fp;
+  FILE *fp = 0;
   char *buf,*c;
   char buf_i[KEYVALLEN], buf_o[KEYVALLEN];
   int found = 0;
